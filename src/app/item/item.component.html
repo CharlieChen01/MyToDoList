@@ -1,0 +1,43 @@
+<script>
+  function resizeTextarea(textarea) {
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
+  }
+  
+  window.addEventListener('DOMContentLoaded', function() {
+    const textareas = document.querySelectorAll('textarea');
+    for (const textarea of textareas) {
+      textarea.addEventListener('input', function() {
+        resizeTextarea(this);
+      });
+    }
+  });  
+</script>
+
+<div class="item">
+    <input
+        [id] = "item.description"
+        type = "checkbox"
+        (change) = "item.done = !item.done"
+        [checked] = "item.done"
+    />
+    <label [for]="item.description">{{ item.description}}</label>
+    <div class="btn-wrapper" *ngIf="!editable">
+        <button class="btn" (click)="editable=!editable">Edit</button>
+        <button class="btn btn-warn" (click)="remove.emit()">Delete</button>
+    </div>
+    <div *ngIf="editable">
+        <textarea
+            rows="7"
+            class="full_view_textarea"
+            placeholder="edit item"
+            [value]="item.description"
+            #editedItem
+            (keyup.enter)="saveItem(editedItem.value)"
+        ></textarea>
+        <div class="btn-wrapper">
+            <button class="btn" (click)="editable=!editable">Cancel</button>
+            <button class="btn btn-save" (click)="saveItem(editedItem.value)">Save</button>
+        </div>
+    </div>
+</div>
